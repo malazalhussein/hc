@@ -28,8 +28,8 @@ while($true){
 }
 
 # Check op actieve services uit de blacklist.
-if (Test-Path -path "C:\Users\malaz\Downloads\blacklist\blacklist.json"){
-$file = Get-Content -Path "C:\Users\malaz\Downloads\blacklist\blacklist.json"
+if (Test-Path -path "C:\"){
+$file = Get-Content -Path "C:\"
 $json = $file | ConvertFrom-Json
 
 $gevonden = 0
