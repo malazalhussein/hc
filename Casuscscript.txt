@@ -1,0 +1,84 @@
+# Check of PowerShell versie 7 wordt gebruikt.
+if ($PSVersionTable.PSVersion.Major -ne 7){
+    Write-Host "PowerShell versie 7 is nodig!"
+    exit
+}
+
+# Vraag aan de gebruiker of het script mag worden uitgevoerd.
+while($true){
+    $antwoord = Read-Host -Prompt "Wil je dit programma uitvoeren (ja of nee) ?"
+    if ($antwoord -eq "ja"){
+        break
+    }
+    if ($antwoord -eq "nee"){
+        exit
+    }
+}
+
+#Vraag of de gebruiker services kan beheren/bekijken.
+while($true){
+    $antwoord = Read-Host -Prompt "Kun je services beheren/bekijken op het systeem (ja of nee) ?"
+    if ($antwoord -eq "ja"){
+        break
+    }
+    if ($antwoord -eq "nee"){
+        Write-host "Je mag geen services beheren/bekijken."
+        exit
+    }
+}
+
+# Check op actieve services uit de blacklist.
+if (Test-Path -path "C:\Users\malaz\Downloads\blacklist\blacklist.json"){
+$file = Get-Content -Path "C:\Users\malaz\Downloads\blacklist\blacklist.json"
+$json = $file | ConvertFrom-Json
+
+$gevonden = 0
+foreach ($item in $json.services){
+    $service = Get-Service -DisplayName $item.DisplayName
+    if($service.Status -eq "Running"){
+    Write-Host "Deze service staat op de Blacklist en is running en het is niet toegestaan"
+    Write-Host $service
+    $gevonden++
+    }
+    if($gevonden -lt 0) {
+        Write-Host "Er zijn geen actieve services in de blacklist"
+    }
+} 
+}
+else {
+    Write-Host "Blacklist bestand bestaat niet"
+}
+
+# SIG # Begin signature block
+# MIIFqwYJKoZIhvcNAQcCoIIFnDCCBZgCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
+# gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUaGL9BZl5FR4qaXlmhkHleQhE
+# 68SgggM6MIIDNjCCAh6gAwIBAgIQKqKqguVmYoJI8gCowPUP6jANBgkqhkiG9w0B
+# AQUFADAmMSQwIgYDVQQDDBtTdHVkZW50IDE1NDc3NiAtIDMxLTAxLTIwMjgwHhcN
+# MjQwMTI2MTMyNTE1WhcNMjUwMTI2MTM0NTE1WjAmMSQwIgYDVQQDDBtTdHVkZW50
+# IDE1NDc3NiAtIDMxLTAxLTIwMjgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+# AoIBAQCuPE4TAAPYGAqB1HtvP43Xf33rIaZnL/BSWTGTm4PG7rdDyI30Tmc2UEYB
+# 9bwIupEfnmx9yD/l+/r3hZeaJJa1r4EpFG9TA01fWQxWTGsiQK1VLwe4jFzAhidZ
+# Ohb+xLMWCpahpg/VG0fs2YoHsPmtxfnMegPBaQFL3uQ+Em3xm6xFwEDqa8UoTUB7
+# B2+YVJsPQgAFfAe4OQ/KBzzjGqhYeMEJutgQassn7ukGU2pAwxNWoKq9rZkZk27s
+# Q+Ca53/aXdYWGoHSGx/A0Mrd0maVB1/05Xs9yD3qkJePnlREsonMhfE5T6NJCIRF
+# 4kPTTk0LBmTh5iolVujnwmo3olThAgMBAAGjYDBeMA4GA1UdDwEB/wQEAwIHgDAT
+# BgNVHSUEDDAKBggrBgEFBQcDAzAYBgNVHREEETAPgg1kb21laW5uYWFtLm5sMB0G
+# A1UdDgQWBBTeTSaOxavthIRANJh9pfjq5dda+TANBgkqhkiG9w0BAQUFAAOCAQEA
+# akY4QgV5M8O/RrT9S2XYRYb/gMvhaBMeZ2Xyi4F93yGwSDqnnNngVkMyMCXOtg8s
+# 8/HTyWB8cj9ynYjt9eQOJqgwqrb76SLyuGnK+iYhiEi9ooy7LYAEhCg9tLib3f6Z
+# uxrw/MJnvqggK1k/13Vy3Ln2hvBKtxAUNcO/Zy6qUg8jcdGx8Bwi5HDNRgwLS4s9
+# AO/Ssh4Eue8NxoBsHH2vlDHpuC8n9V8Tae7Cd+As4Fwurfy1Pbm2pDPDzmfPxb5K
+# 2BQb6471e1pCNTAKTJK8jNyMXb00yGAKzYQMoLlN/hJR3jXUVIbQwLzAHDAA+Nu+
+# ApkbrVQpvLZHuAUOC83ArzGCAdswggHXAgEBMDowJjEkMCIGA1UEAwwbU3R1ZGVu
+# dCAxNTQ3NzYgLSAzMS0wMS0yMDI4AhAqoqqC5WZigkjyAKjA9Q/qMAkGBSsOAwIa
+# BQCgeDAYBgorBgEEAYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEMBgor
+# BgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqGSIb3
+# DQEJBDEWBBSuh0PocrjU/t96UGqKuOusdWT6PDANBgkqhkiG9w0BAQEFAASCAQBZ
+# SFRB4hnBtIxMFO+G/UBbH3sXn0BW4JADJkyP69ze1UoE/8cvsqGwsnNbEUYyT2G/
+# 6lUbtMBpCn5Cb2eFFClDoo/rNboq24o0pAH+ylpNDbE6uckHvLI56PlZD+uYmc9Q
+# bDDGxUjQSrvU04lMfNNQfIOktXDQ2wcUjx5JcTQjGIBnCiUtGakAvRBtyEFtIugq
+# 6iDGYG+eLg6eJKUdvBGvhmF7di8ZHsyyfVYoMhY8+12gXxZ3y+28KuP2MeSsjfmE
+# btLJlmF/VbLVpKdugSUHwcKjoc8lKAdaWcOodwxnKm3hcTk/VRfQ5c5qMXp80M+S
+# Eui1iqidDIMt0D2D8kgc
+# SIG # End signature block
